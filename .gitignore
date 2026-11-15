@@ -1,0 +1,6 @@
+templates/extractor testing
+templates/old asl
+templates/old maps
+templates/old roms
+templates/*.map
+templates/*.asl
