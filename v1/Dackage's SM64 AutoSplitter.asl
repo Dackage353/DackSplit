@@ -449,7 +449,7 @@ update
         
         #region Process split values
         current.key1Flag = (current.keyFlagsByte & (1 << 4)) != 0;
-        current.key2Flag = (current.keyFlagsByte & (1 << 5)) != 0;;
+        current.key2Flag = (current.keyFlagsByte & (1 << 5)) != 0;
         
         if (current.levelID != old.levelID)
         {
