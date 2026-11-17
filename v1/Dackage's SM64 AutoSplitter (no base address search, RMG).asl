@@ -61,7 +61,6 @@ startup
     settings.Add("SplitOnFinalSplitWarp", false, "Split on final split when warped in B3 fight (for Star Road 0/80 Star)");
     settings.Add("LastImpactStartReset", false, "Enable Last Impact start/reset mode");
     
-    settings.Add("SwapStarCountAndLevelSymbols", false, "Swap the star count () and level [] symbols");
     settings.Add("UseDefaultSplitOptionWhenNoConditions", false, "Use default split option on splits without conditions");
     #endregion
     
@@ -186,27 +185,10 @@ update
             vars.splitOnAnyLevelChange = false;
             vars.splitStarCountHasChanged = false;
             vars.splitLevelIDHasChanged = false;
-            vars.splitKeyHasChanged = false;
+            vars.splitGotNewKey = false;
             
             string[] splitNameTerms = current.splitName.Split(null);
             splitNameTerms = splitNameTerms.Select(term => term.Trim()).ToArray();
-            
-            char starCountOpenSymbol, starCountCloseSymbol, levelOpenSymbol, levelCloseSymbol;
-            
-            if (!settings["SwapStarCountAndLevelSymbols"])
-            {
-                starCountOpenSymbol = vars.StarCountOpenSymbol;
-                starCountCloseSymbol = vars.StarCountCloseSymbol;
-                levelOpenSymbol = vars.LevelOpenSymbol;
-                levelCloseSymbol = vars.LevelCloseSymbol;
-            }
-            else
-            {
-                starCountOpenSymbol = vars.LevelOpenSymbol;
-                starCountCloseSymbol = vars.LevelCloseSymbol;
-                levelOpenSymbol = vars.StarCountOpenSymbol;
-                levelCloseSymbol = vars.StarCountCloseSymbol;
-            }
             
             foreach (string term in splitNameTerms)
             {
@@ -222,7 +204,7 @@ update
                 {
                     string inside = term.Substring(1, term.Length - 2).Trim();
                     
-                    if (term.First() == starCountOpenSymbol && term.Last() == starCountCloseSymbol)
+                    if (term.First() == vars.StarCountOpenSymbol && term.Last() == vars.StarCountCloseSymbol)
                     {
                         if (inside == string.Empty)
                         {
@@ -237,7 +219,7 @@ update
                             }
                         }
                     }
-                    else if (term.First() == levelOpenSymbol && term.Last() == levelCloseSymbol)
+                    else if (term.First() == vars.LevelOpenSymbol && term.Last() == vars.LevelCloseSymbol)
                     {
                         if (inside == string.Empty)
                         {
@@ -300,8 +282,8 @@ update
         #endregion
         
         #region Process split values
-        current.key1Flag = (current.keyFlagsByte & (1 << 4)) != 0 || (current.keyFlagsByte & (1 << 6)) != 0;
-        current.key2Flag = (current.keyFlagsByte & (1 << 5)) != 0 || (current.keyFlagsByte & (1 << 7)) != 0;
+        current.key1Flag = (current.keyFlagsByte & (1 << 4)) != 0;
+        current.key2Flag = (current.keyFlagsByte & (1 << 5)) != 0;
         
         if (current.levelID != old.levelID)
         {
@@ -335,11 +317,11 @@ update
         if (vars.sameLevelAreaChange) vars.newAreaIndex = current.areaIndex;
         if (vars.levelChanged) vars.splitLevelIDHasChanged = true;
         if (current.starCount != old.starCount) vars.splitStarCountHasChanged = true;
-        if (current.key1Flag != old.key1Flag || current.key2Flag != old.key2Flag) vars.splitKeyHasChanged = true;
+        if ((current.key1Flag && !old.key1Flag) || (current.key2Flag && !old.key2Flag)) vars.splitGotNewKey = true;
         #endregion
         
         #region Test split info against current values
-        bool passedKeyTest = !vars.splitContainsKey || vars.splitKeyHasChanged;
+        bool passedKeyTest = !vars.splitContainsKey || vars.splitGotNewKey;
         bool passedStarCountTest = (vars.splitStarCount == -1 || current.starCount == vars.splitStarCount) &&
             (!vars.splitOnAnyStarCountChange || vars.splitStarCountHasChanged);
         bool passedLevelIDTest = (vars.splitLevelID == -1 || current.levelID == vars.splitLevelID) &&
