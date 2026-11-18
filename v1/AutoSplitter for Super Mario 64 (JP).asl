@@ -27,12 +27,12 @@ startup
     vars.AreaSeparator = ':';
     
     // These need changing if using another vanilla game version or a nonbinary/decomp ROM hack
-    vars.StarCountAddress = 0x33B218;
-    vars.LevelIDAddress = 0x32DDFA;
-    vars.AreaIndexAddress = 0x33B4BF;
-    vars.ActionIDAddress = 0x33B17C;
-    vars.NumVBlanksAddress = 0x32D580;
-    vars.FileAAddress = 0x207708;
+    vars.StarCountAddress = 0x339ea8;
+    vars.LevelIDAddress = 0x32ce9a;
+    vars.AreaIndexAddress = 0x33a14f;
+    vars.ActionIDAddress = 0x339e0c;
+    vars.NumVBlanksAddress = 0x32c640;
+    vars.FileAAddress = 0x207b08;
     vars.FileALength = 0x70;
     #endregion
     
@@ -60,7 +60,7 @@ startup
     settings.Add("SplitOnFinalSplitStar", true, "Split on final split when Grand Star or regular star was grabbed");
     settings.Add("SplitOnFinalSplitWarp", false, "Split on final split when warped in B3 fight (for Star Road 0/80 Star)");
     settings.Add("LastImpactStartReset", false, "Enable Last Impact start/reset mode");
-    
+
     settings.Add("UseDefaultSplitOptionWhenNoConditions", false, "Use default split option on splits without conditions");
     #endregion
     

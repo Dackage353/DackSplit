@@ -60,7 +60,7 @@ startup
     settings.Add("SplitOnFinalSplitStar", true, "Split on final split when Grand Star or regular star was grabbed");
     settings.Add("SplitOnFinalSplitWarp", false, "Split on final split when warped in B3 fight (for Star Road 0/80 Star)");
     settings.Add("LastImpactStartReset", false, "Enable Last Impact start/reset mode");
-    
+
     settings.Add("UseDefaultSplitOptionWhenNoConditions", false, "Use default split option on splits without conditions");
     #endregion
     
