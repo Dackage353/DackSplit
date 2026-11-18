@@ -54,7 +54,6 @@ asl = tmpl.format(
     gPlayerSpawnInfos_areaIndex    = ptr_swap8(map["gPlayerSpawnInfos"] + 0xC),
     gMarioStates_action            = ptr_swap32(map["gMarioStates"] + 0xC),
     gNumVblanks                    = ptr_swap32(map["gNumVblanks"]),
-    gSaveBufferSize                = 0x78,
     gSaveBuffer                    = ptr_swap32(map["gSaveBuffer"] + 0x4),
     gTimerOffset                   = ptr_swap32(map["gTimerOffset"]),
     gGlobalTimer                   = ptr_swap32(map["gGlobalTimer"])

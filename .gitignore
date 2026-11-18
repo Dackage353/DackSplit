@@ -5,3 +5,4 @@ templates/old roms
 templates/*.map
 templates/*.asl
 supported bps
+templates/output
