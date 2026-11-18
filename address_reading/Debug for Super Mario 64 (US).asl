@@ -3,11 +3,11 @@ state("retroarch") { }
 
 startup
 {
-    vars.StarCountAddress = 0x33B218;
-    vars.LevelIDAddress = 0x32DDFA;
-    vars.AreaIndexAddress = 0x33B4BF;
-    vars.ActionIDAddress = 0x33B17C;
-    vars.NumVBlanksAddress = 0x32D580;
+    vars.StarCountAddress = 0x33b218;
+    vars.LevelIDAddress = 0x32ddfa;
+    vars.AreaIndexAddress = 0x33b4bf;
+    vars.ActionIDAddress = 0x33b17c;
+    vars.NumVBlanksAddress = 0x32d580;
     vars.FileAAddress = 0x207708;
     
 	settings.Add("CompileCheck", false, "If you see this it compiled");
