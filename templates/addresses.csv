@@ -1,6 +1,6 @@
 name,version,type,StarCountAddress,LevelIDAddress,AreaIndexAddress,ActionIDAddress,NumVBlanksAddress,FileAAddress,FileALength,KeyByteOffset,IGTTimerOffsetAddress,IGTGlobalTimerAddress,IGTOffsetSeconds
 Super Mario 64,US,standard,0x33b218,0x32ddfa,0x33b4bf,0x33b17c,0x32d580,0x207708,0x70,,,,
-Super Mario 64,JP,standard,,,,,,,,,,,
+Super Mario 64,JP,standard,0x339ea8,0x32ce9a,0x33a14f,0x339e0c,0x32c640,0x207b08,0x70,,,,
 Enigmatic Endeavour 64,v1.0,standard,0x1ca1de,0x1bc82e,0x1c8f0f,0x1ca1f4,0x101ce0,0x4cda8,0x70,,,,
 Mario Adventure 2,hotfix 7,standard,0x1b6f20,0x1ab9e6,0x1b6407,0x1b6e84,0x116ce4,0x201fa4,0x3e6,,,,
 Katze Stuck in the Toilet 64,hacktice_v2,aglab igt,0x1bc82c,0x1aed3a,0x1bb4e3,0x1bc790,0x10bca0,0x4cda4,0x70,0x4,0x1aed34,0x1b0588,6
