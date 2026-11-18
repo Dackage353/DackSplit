@@ -37,6 +37,7 @@ startup
     
     vars.IGTTimerOffsetAddress = 0x1aed34;
     vars.IGTGlobalTimerAddress = 0x1b0588;
+    vars.IGTOffsetSeconds = 6;
     #endregion
     
     #region Non-editable constants
@@ -64,7 +65,6 @@ startup
     settings.Add("SplitOnFinalSplitWarp", false, "Split on final split when warped in B3 fight (for Star Road 0/80 Star)");
     settings.Add("LastImpactStartReset", false, "Enable Last Impact start/reset mode");
     
-    settings.Add("SwapStarCountAndLevelSymbols", false, "Swap the star count () and level [] symbols");
     settings.Add("UseDefaultSplitOptionWhenNoConditions", false, "Use default split option on splits without conditions");
     #endregion
     
@@ -523,10 +523,10 @@ gameTime
 {
     if (current.igtTimerOffset == 0 || current.levelID == 1)
     {
-        return TimeSpan.FromSeconds(current.igtSaveFile / 30.0);
+        return TimeSpan.FromSeconds(vars.IGTOffsetSeconds + (current.igtSaveFile / 30.0));
     }
     
-    return TimeSpan.FromSeconds((current.igtSaveFile + current.igtGlobalTimer - current.igtTimerOffset) / 30.0);
+    return TimeSpan.FromSeconds(vars.IGTOffsetSeconds + ((current.igtSaveFile + current.igtGlobalTimer - current.igtTimerOffset) / 30.0));
 }
 
 reset
