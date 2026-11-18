@@ -1,0 +1,16 @@
+for v1.3.3 or v1.4.0
+
+
+code only, dont announce
+-----
+simplified key flag handling
+
+
+announceable
+-----
+added sm74
+added enigmatic endeavor
+added ma2hotfix7
+
+key and save file fix for ksitt and sm74
+removed swap level and star symbol option
