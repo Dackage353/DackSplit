@@ -1,21 +1,21 @@
-state("project64") {{ }}
-state("retroarch") {{ }}
+state("project64") { }
+state("retroarch") { }
 
 startup
-{{
-    vars.StarCountAddress = 0x{gMarioStates_numStars:x};
-    vars.LevelIDAddress = 0x{gCurrLevelNum:x};
-    vars.AreaIndexAddress = 0x{gPlayerSpawnInfos_areaIndex:x};
-    vars.ActionIDAddress = 0x{gMarioStates_action:x};
-    vars.NumVBlanksAddress = 0x{gNumVblanks:x};
-    vars.FileAAddress = 0x{gSaveBuffer:x};
+{
+    vars.StarCountAddress = $StarCountAddress;
+    vars.LevelIDAddress = $LevelIDAddress;
+    vars.AreaIndexAddress = $AreaIndexAddress;
+    vars.ActionIDAddress = $ActionIDAddress;
+    vars.NumVBlanksAddress = $NumVBlanksAddress;
+    vars.FileAAddress = $FileAAddress;
     
 	settings.Add("CompileCheck", false, "If you see this it compiled");
     vars.AddressSearchInterval = 1000;
-}}
+}
 
 init
-{{
+{
     current.starCount = 0;
     current.levelID = 0;
     current.areaIndex = 0;
@@ -29,19 +29,19 @@ init
     vars.verifyRetriesLeft = 0;
     
     vars.retroarch = game.ProcessName.Contains("retroarch");
-}}
+}
 
 update
-{{
+{
     #region Handle baseRAMAddress
     if (!vars.baseRAMAddressFound)
-    {{
+    {
         if (!vars.stopwatch.IsRunning || vars.stopwatch.ElapsedMilliseconds > vars.AddressSearchInterval)
-        {{
+        {
             vars.stopwatch.Start();
             vars.baseRAMAddress = IntPtr.Zero;
             
-            {{
+            {
                 // Hardcoded values because GetSystemInfo / GetNativeSystemInfo can't return info for remote process
                 var min = 0x10000L;
                 var max = game.Is64Bit() ? 0x00007FFFFFFEFFFFL : 0xFFFFFFFFL;
@@ -50,7 +50,7 @@ update
                 
                 var addr = min;
                 do
-                {{
+                {
                     MemoryBasicInformation mbi;
                     if (WinAPI.VirtualQueryEx(game.Handle, (IntPtr)addr, out mbi, mbiSize) == (UIntPtr)0)
                         break;
@@ -70,113 +70,113 @@ update
                         continue;
                     
                     if (vars.retroarch)
-                    {{
+                    {
                         ulong size = (ulong)mbi.RegionSize;
                         bool ramFound = false;
                         if (size >= 0x800000)
-                        {{
+                        {
                             ulong align = 0x10000;
                             ulong address = (ulong) mbi.BaseAddress;
                             ulong addressAlignedStart = (address + align - 1) / align * align;
                             ulong addressAlignedEnd = (address + size) / align * align;
                             
                             for (ulong probe = addressAlignedStart; probe <= addressAlignedEnd; probe += align)
-                            {{
+                            {
                                 uint val;
                                 var probeAddr = (IntPtr) probe;
                                 bool readSuccess = game.ReadValue(probeAddr, out val);
                                 if (readSuccess)
-                                {{
+                                {
                                     if ((val & 0xfffff000) == 0x3C1A8000)
-                                    {{
+                                    {
                                         vars.baseRAMAddress = probeAddr;
                                         ramFound = true;
                                         break;
-                                    }}
-                                }}
-                            }}
-                        }}
+                                    }
+                                }
+                            }
+                        }
                         
                         if (ramFound)
-                        {{
+                        {
                             break;
-                        }}
-                    }}
+                        }
+                    }
                     else
-                    {{
+                    {
                         uint val;
                         if (!game.ReadValue(mbi.BaseAddress, out val))
-                        {{
+                        {
                             continue;
-                        }}
+                        }
                         if ((val & 0xfffff000) == 0x3C1A8000)
-                        {{
+                        {
                             vars.baseRAMAddress = mbi.BaseAddress;
                             break;
-                        }}
-                    }}
-                }} while (addr < max);
-            }}
+                        }
+                    }
+                } while (addr < max);
+            }
             
             if (vars.retroarch)
-            {{
+            {
                 var parallelModule = modules.Where(x => x.ModuleName.Contains("parallel_n64")).First();
                 var parallelStart = (long) parallelModule.BaseAddress;
                 for (long num = 0; num < (long) parallelModule.ModuleMemorySize / 0x1000; num++)
-                {{
+                {
                     uint val;
                     var addr = (IntPtr) (parallelStart + num * 0x1000);
                     if (!game.ReadValue(addr, out val))
-                    {{
+                    {
                         continue;
-                    }}
+                    }
                     if ((val & 0xfffff000) == 0x3C1A8000)
-                    {{
+                    {
                         vars.baseRAMAddress = addr;
                         break;
-                    }}
-                }}
-            }}
+                    }
+                }
+            }
             
             if (vars.baseRAMAddress == IntPtr.Zero)
-            {{
+            {
                 vars.stopwatch.Restart();
                 return false;
-            }}
+            }
             else
-            {{
+            {
                 vars.stopwatch.Reset();
                 vars.baseRAMAddressFound = true;
-            }}
-        }}
+            }
+        }
         else
-        {{
+        {
             return false;
-        }}
-    }}
+        }
+    }
     
     // Verify base RAM address is still valid on each update
     uint tval;
     if (!game.ReadValue((IntPtr) vars.baseRAMAddress, out tval))
-    {{
+    {
         vars.baseRAMAddressFound = false;
         vars.baseRAMAddress = IntPtr.Zero;
         return false;
-    }}
+    }
     
     if ((tval & 0xfffff000) != 0x3C1A8000)
-    {{
+    {
         if (0 == (vars.verifyRetriesLeft--))
-        {{
+        {
             vars.baseRAMAddressFound = false;
             vars.baseRAMAddress = IntPtr.Zero;
-        }}
+        }
         return false;
-    }}
+    }
     else
-    {{
+    {
         vars.verifyRetriesLeft = 100;
-    }}
+    }
     #endregion
     
     #region Read memory addresses
@@ -200,4 +200,4 @@ update
     print(sb.ToString());
     
     return true;
-}}
+}
