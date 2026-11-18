@@ -27,11 +27,11 @@ startup
     vars.AreaSeparator = ':';
     
     // These need changing if using another vanilla game version or a nonbinary/decomp ROM hack
-    vars.StarCountAddress = 0x33B218;
-    vars.LevelIDAddress = 0x32DDFA;
-    vars.AreaIndexAddress = 0x33B4BF;
-    vars.ActionIDAddress = 0x33B17C;
-    vars.NumVBlanksAddress = 0x32D580;
+    vars.StarCountAddress = 0x33b218;
+    vars.LevelIDAddress = 0x32ddfa;
+    vars.AreaIndexAddress = 0x33b4bf;
+    vars.ActionIDAddress = 0x33b17c;
+    vars.NumVBlanksAddress = 0x32d580;
     vars.FileAAddress = 0x207708;
     vars.FileALength = 0x70;
     #endregion

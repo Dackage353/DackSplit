@@ -32,7 +32,7 @@ startup
     vars.AreaIndexAddress = 0x18574b;
     vars.ActionIDAddress = 0x1861a4;
     vars.NumVBlanksAddress = 0xd6be4;
-    vars.FileAAddress = 0xa3128;
+    vars.FileAAddress = 0xa3124;
     vars.FileALength = 0x70;
     vars.KeyFlagsByteOffset = 0x4;
     
