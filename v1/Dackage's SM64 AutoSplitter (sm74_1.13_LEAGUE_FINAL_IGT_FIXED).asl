@@ -33,7 +33,8 @@ startup
     vars.ActionIDAddress = 0x1861a4;
     vars.NumVBlanksAddress = 0xd6be4;
     vars.FileAAddress = 0xa3128;
-    vars.FileALength = 0x78;
+    vars.FileALength = 0x70;
+    vars.KeyFlagsByteOffset = 0x4;
     
     vars.IGTTimerOffsetAddress = 0x185134;
     vars.IGTGlobalTimerAddress = 0x184fa8;
@@ -321,7 +322,7 @@ update
     current.areaIndex = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.AreaIndexAddress));
     current.actionID = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.ActionIDAddress));
     current.numVBlanks = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.NumVBlanksAddress));
-    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress));
+    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress + vars.KeyFlagsByteOffset));
     
     current.igtSaveFile = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.FileAAddress));
     current.igtTimerOffset = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.IGTTimerOffsetAddress));

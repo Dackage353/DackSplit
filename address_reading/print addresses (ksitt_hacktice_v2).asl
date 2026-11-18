@@ -9,7 +9,7 @@ startup
     vars.ActionIDAddress = 0x1bc790;
     vars.NumVBlanksAddress = 0x10bca0;
     vars.FileAAddress = 0x4cda4;
-    vars.KeyFlagsByteOffset = 0x0;
+    vars.KeyFlagsByteOffset = 0x4;
     
     vars.IGTTimerOffsetAddress = 0x1aed34;
     vars.IGTGlobalTimerAddress = 0x1b0588;
