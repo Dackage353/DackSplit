@@ -12,6 +12,8 @@ def write_output(file_name, output):
 
     with open(file_path, 'w', encoding='utf-8') as output_file:
         output_file.write(output)
+        
+    print(f"made {file_name}")
 
 
 if __name__ == '__main__':
