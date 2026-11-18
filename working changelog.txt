@@ -8,9 +8,12 @@ simplified key flag handling
 
 announceable
 -----
-added sm74
-added enigmatic endeavor
-added ma2hotfix7
+added Enigmatic Endeavour (v1.0)
+added Mario Adventure 2 (hotfix 7)
+added Marios New Earth (v1.0c)
+added Super Mario 74 (v1.13)
+added SM64 The Green Stars (v3.4.3)
 
 key and save file fix for ksitt and sm74
+improved star road final split condition
 removed swap level and star symbol option
