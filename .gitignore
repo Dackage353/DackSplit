@@ -6,6 +6,7 @@ extraction/output
 
 extraction/*.map
 extraction/*.bat
+extraction/output.txt
 
 generation/output
 generation/*.bat
