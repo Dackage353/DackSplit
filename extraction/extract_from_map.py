@@ -4,6 +4,7 @@
 import sys
 from string import Template
 
+
 if len(sys.argv) != 2:
     print(f"error: missing map")
     sys.exit(1)
@@ -20,16 +21,20 @@ def ptr_swap(ptr, table):
     assert os != -1, f"Failed to swap 0x{ptr:x} using {table}"
     return (c * 4 + os) & 0xffffff
 
+
 # All pointers must be aligned on a size it will read
 # It is not an x86 requirement but MIPS requirement
 def ptr_swap8(ptr):
     return ptr_swap(ptr, [ 3, 2, 1, 0 ])
 
+
 def ptr_swap16(ptr):
     return ptr_swap(ptr, [ 2, -1, 0, -1 ])
 
+
 def ptr_swap32(ptr):
     return ptr_swap(ptr, [0, -1, -1, -1])
+
 
 def get_map():
     map = {}
@@ -48,23 +53,6 @@ def get_map():
                 pass
 
     return map
-
-
-'''
-asl = tmpl.format(
-    gMarioStates_numStars       = ptr_swap16(map["gMarioStates"] + 0xAA) if "gMarioStates" in map else '',
-    gMarioStates_action         = ptr_swap32(map["gMarioStates"] + 0xC) if "gMarioStates" in map else '',
-
-    gCurrLevelNum               = ptr_swap16(map["gCurrLevelNum"]) if "gCurrLevelNum" in map else '',
-    gPlayerSpawnInfos_areaIndex = ptr_swap8(map["gPlayerSpawnInfos"] + 0xC) if "gPlayerSpawnInfos" in map else '',
-
-    gNumVblanks                 = ptr_swap32(map["gNumVblanks"]) if "gNumVblanks" in map else '',
-    gSaveBuffer                 = ptr_swap32(map["gSaveBuffer"] + 0x4) if "gSaveBuffer" in map else '',
-
-    gTimerOffset                = ptr_swap32(map["gTimerOffset"]) if "gTimerOffset" in map else '',
-    gGlobalTimer                = ptr_swap32(map["gGlobalTimer"]) if "gGlobalTimer" in map else ''
-)
-'''
 
 
 if __name__ == '__main__':
