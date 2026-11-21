@@ -10,7 +10,7 @@ if len(sys.argv) != 2:
     sys.exit(1)
 
 map_path = sys.argv[1]
-tmpl_path = 'extract_from_map.tmpl'
+tmpl_path = 'extract.tmpl'
 output_path = 'output.txt'
 
 
