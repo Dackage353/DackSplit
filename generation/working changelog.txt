@@ -14,6 +14,8 @@ added Marios New Earth (v1.0c)
 added Super Mario 74 (v1.13)
 added SM64 The Green Stars (v3.4.3)
 
+any save file now works for keys and igt
+
 key and save file fix for ksitt and sm74
 improved star road final split condition
 removed swap level and star symbol option
