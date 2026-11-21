@@ -1,8 +1,6 @@
-extraction/extractor testing
-extraction/old asl
+extraction/crash map extractor
 extraction/old maps
 extraction/old roms
-extraction/output
 
 extraction/*.map
 extraction/*.bat
