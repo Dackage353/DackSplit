@@ -2,6 +2,16 @@
 # https://github.com/aglab2/LiveSplitAutoSplitters/blob/master/gen_sm64_asl.py
 
 import sys
+from string import Template
+
+if len(sys.argv) != 2:
+    print(f"error: missing map")
+    sys.exit(1)
+
+map_path = sys.argv[1]
+tmpl_path = 'extract_from_map.tmpl'
+output_path = 'output.txt'
+
 
 def ptr_swap(ptr, table):
     c = ptr // 4
@@ -21,43 +31,70 @@ def ptr_swap16(ptr):
 def ptr_swap32(ptr):
     return ptr_swap(ptr, [0, -1, -1, -1])
 
-if len(sys.argv) != 4:
-    print(f"Usage: {sys.argv[0]} MAP_PATH TMPL_PATH OUT_ASL_PATH")
-    sys.exit(1)
+def get_map():
+    map = {}
+    with open(map_path) as map_file:
+        for map_line in map_file:
+            map_line_split = map_line.split()
+            if len(map_line_split) != 2:
+                continue
 
-map_path = sys.argv[1]
-tmpl_path = sys.argv[2]
-asl_path = sys.argv[3]
+            map_addr_str = map_line_split[0]
+            map_symbol = map_line_split[1]
+            try:
+                map_addr = int(map_addr_str, 0)
+                map[map_symbol] = map_addr
+            except:
+                pass
 
-map = {}
-with open(map_path) as map_file:
-    for map_line in map_file:
-        map_line_split = map_line.split()
-        if len(map_line_split) != 2:
-            continue
+    return map
 
-        map_addr_str = map_line_split[0]
-        map_symbol = map_line_split[1]
-        try:
-            map_addr = int(map_addr_str, 0)
-            map[map_symbol] = map_addr
-        except:
-            pass
 
-tmpl = ""
-with open(tmpl_path) as tmpl_file:
-    tmpl = tmpl_file.read()
-
+'''
 asl = tmpl.format(
-    gMarioStates_numStars          = ptr_swap16(map["gMarioStates"] + 0xAA),
-    gCurrLevelNum                  = ptr_swap16(map["gCurrLevelNum"]),
-    gPlayerSpawnInfos_areaIndex    = ptr_swap8(map["gPlayerSpawnInfos"] + 0xC),
-    gMarioStates_action            = ptr_swap32(map["gMarioStates"] + 0xC),
-    gNumVblanks                    = ptr_swap32(map["gNumVblanks"]),
-    gSaveBuffer                    = ptr_swap32(map["gSaveBuffer"] + 0x4),
-    gTimerOffset                   = ptr_swap32(map["gTimerOffset"]),
-    gGlobalTimer                   = ptr_swap32(map["gGlobalTimer"])
-)
+    gMarioStates_numStars       = ptr_swap16(map["gMarioStates"] + 0xAA) if "gMarioStates" in map else '',
+    gMarioStates_action         = ptr_swap32(map["gMarioStates"] + 0xC) if "gMarioStates" in map else '',
 
-with open(asl_path, 'w') as asl_file:
-    asl_file.write(asl)
+    gCurrLevelNum               = ptr_swap16(map["gCurrLevelNum"]) if "gCurrLevelNum" in map else '',
+    gPlayerSpawnInfos_areaIndex = ptr_swap8(map["gPlayerSpawnInfos"] + 0xC) if "gPlayerSpawnInfos" in map else '',
+
+    gNumVblanks                 = ptr_swap32(map["gNumVblanks"]) if "gNumVblanks" in map else '',
+    gSaveBuffer                 = ptr_swap32(map["gSaveBuffer"] + 0x4) if "gSaveBuffer" in map else '',
+
+    gTimerOffset                = ptr_swap32(map["gTimerOffset"]) if "gTimerOffset" in map else '',
+    gGlobalTimer                = ptr_swap32(map["gGlobalTimer"]) if "gGlobalTimer" in map else ''
+)
+'''
+
+
+if __name__ == '__main__':
+
+    map = get_map()
+
+    gMarioStates = map.get('gMarioStates')
+    gCurrLevelNum = map.get('gCurrLevelNum')
+    gPlayerSpawnInfos = map.get('gPlayerSpawnInfos')
+    gNumVblanks = map.get('gNumVblanks')
+    gSaveBuffer = map.get('gSaveBuffer')
+    gTimerOffset = map.get('gTimerOffset')
+    gGlobalTimer = map.get('gGlobalTimer')
+
+
+    with open(tmpl_path) as file:
+        text = file.read()
+
+    text = Template(text).safe_substitute(gMarioStates_numStars = hex(ptr_swap16(gMarioStates + 0xAA)) if gMarioStates else '')
+    text = Template(text).safe_substitute(gMarioStates_action = hex(ptr_swap32(gMarioStates + 0xC)) if gMarioStates else '')
+
+    text = Template(text).safe_substitute(gCurrLevelNum = hex(ptr_swap16(gCurrLevelNum)) if gCurrLevelNum else '')
+    text = Template(text).safe_substitute(gPlayerSpawnInfos_areaIndex = hex(ptr_swap8(gPlayerSpawnInfos + 0xC)) if gPlayerSpawnInfos else '')
+
+    text = Template(text).safe_substitute(gNumVblanks = hex(ptr_swap32(gNumVblanks)) if gNumVblanks else '')
+    text = Template(text).safe_substitute(gSaveBuffer = hex(ptr_swap32(gSaveBuffer)) if gSaveBuffer else '')
+
+    text = Template(text).safe_substitute(gTimerOffset = hex(ptr_swap32(gTimerOffset)) if gTimerOffset else '')
+    text = Template(text).safe_substitute(gGlobalTimer = hex(ptr_swap32(gGlobalTimer)) if gGlobalTimer else '')
+
+
+    with open(output_path, 'w') as file:
+        file.write(text)
