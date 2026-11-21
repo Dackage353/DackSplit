@@ -1,12 +1,14 @@
-templates/extractor testing
-templates/old asl
-templates/old maps
-templates/old roms
-templates/output
+extraction/extractor testing
+extraction/old asl
+extraction/old maps
+extraction/old roms
+extraction/output
 
-templates/*.map
-templates/*.asl
-templates/*.bat
+extraction/*.map
+extraction/*.bat
+
+generation/output
+generation/*.bat
 
 old
 supported bps
