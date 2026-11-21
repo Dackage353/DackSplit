@@ -9,8 +9,9 @@ startup
     vars.ActionIDAddress = 0x1c6a78;
     vars.NumVBlanksAddress = 0x10d020;
     vars.FileAAddress = 0x4cda0;
-    vars.FileALength = 0x70;
+    vars.FileLength = 0x70;
     vars.KeyFlagsByteOffset = 0x8;
+    vars.FileNumberAddress = 0x1b8fa0;
 
     vars.IGTSaveFileOffset = 0x4;
     vars.IGTTimerOffsetAddress = 0x1b8f9c;
@@ -28,6 +29,7 @@ init
     current.actionID = 0;
     current.numVBlanks = 0;
     current.keyFlagsByte = 0;
+    current.fileNumber = 0;
     
     vars.baseRAMAddressFound = false;
     vars.stopwatch = new Stopwatch();
@@ -176,9 +178,14 @@ update
     current.areaIndex = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.AreaIndexAddress));
     current.actionID = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.ActionIDAddress));
     current.numVBlanks = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.NumVBlanksAddress));
-    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress + vars.KeyFlagsByteOffset));
-    
-    current.igtSaveFile = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.FileAAddress + vars.IGTSaveFileOffset));
+    current.fileNumber = memory.ReadValue<short>((IntPtr) (vars.baseRAMAddress + vars.FileNumberAddress));
+
+    int fileOffset = vars.FileLength * (current.fileNumber - 1);
+    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress +
+        fileOffset + vars.KeyFlagsByteOffset));
+
+    current.igtSaveFile = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.FileAAddress +
+        + fileOffset + vars.IGTSaveFileOffset));
     current.igtTimerOffset = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.IGTTimerOffsetAddress));
     current.igtGlobalTimer = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.IGTGlobalTimerAddress));
     #endregion
@@ -191,6 +198,7 @@ update
     sb.Append(" - actionID: " + current.actionID);
     sb.Append(" - numVBlanks: " + current.numVBlanks);
     sb.Append(" - keyFlagsByte: " + current.keyFlagsByte);
+    sb.Append(" - fileNumber: " + current.fileNumber);
 	
     sb.Append(" - igtSaveFile: " + current.igtSaveFile);
     sb.Append(" - igtTimerOffset: " + current.igtTimerOffset);

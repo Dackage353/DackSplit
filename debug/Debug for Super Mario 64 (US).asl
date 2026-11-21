@@ -9,7 +9,9 @@ startup
     vars.ActionIDAddress = 0x33b17c;
     vars.NumVBlanksAddress = 0x32d580;
     vars.FileAAddress = 0x207700;
+    vars.FileLength = 0x70;
     vars.KeyFlagsByteOffset = 0x8;
+    vars.FileNumberAddress = 0x32ddf6;
     
 	settings.Add("CompileCheck", false, "If you see this it compiled");
     vars.AddressSearchInterval = 1000;
@@ -23,6 +25,7 @@ init
     current.actionID = 0;
     current.numVBlanks = 0;
     current.keyFlagsByte = 0;
+    current.fileNumber = 0;
     
     vars.baseRAMAddressFound = false;
     vars.stopwatch = new Stopwatch();
@@ -171,7 +174,11 @@ update
     current.areaIndex = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.AreaIndexAddress));
     current.actionID = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.ActionIDAddress));
     current.numVBlanks = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.NumVBlanksAddress));
-    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress + vars.KeyFlagsByteOffset));
+    current.fileNumber = memory.ReadValue<short>((IntPtr) (vars.baseRAMAddress + vars.FileNumberAddress));
+
+    int fileOffset = vars.FileLength * (current.fileNumber - 1);
+    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress +
+        fileOffset + vars.KeyFlagsByteOffset));
     #endregion
     
     var sb = new StringBuilder();
@@ -182,6 +189,7 @@ update
     sb.Append(" - actionID: " + current.actionID);
     sb.Append(" - numVBlanks: " + current.numVBlanks);
     sb.Append(" - keyFlagsByte: " + current.keyFlagsByte);
+    sb.Append(" - fileNumber: " + current.fileNumber);
     
     print(sb.ToString());
     

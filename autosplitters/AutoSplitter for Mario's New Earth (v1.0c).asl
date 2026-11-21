@@ -33,8 +33,9 @@ startup
     vars.ActionIDAddress = 0x1caf58;
     vars.NumVBlanksAddress = 0x10d030;
     vars.FileAAddress = 0x4cda0;
-    vars.FileALength = 0x70;
+    vars.FileLength = 0x70;
     vars.KeyFlagsByteOffset = 0x8;
+    vars.FileNumberAddress = 0x1bd2c0;
 
     vars.IGTSaveFileOffset = 0x4;
     vars.IGTTimerOffsetAddress = 0x1bd2bc;
@@ -43,7 +44,7 @@ startup
     #endregion
     
     #region Non-editable constants
-    vars.EmptyFile = ((IEnumerable<byte>) Enumerable.Repeat((byte) 0, vars.FileALength)).ToArray();
+    vars.EmptyFile = ((IEnumerable<byte>) Enumerable.Repeat((byte) 0, vars.FileLength)).ToArray();
     
     // The livesplit parser can't handle braces in quotes. 123 is open brace, 125 is close brace
     vars.SubsplitSectionNameOpenSymbol = (char) 123;
@@ -156,6 +157,7 @@ init
     current.actionID = 0;
     current.numVBlanks = 0;
     current.keyFlagsByte = 0;
+    current.fileNumber = 0;
     
     current.igtSaveFile = 0;
     current.igtTimerOffset = 0;
@@ -308,9 +310,14 @@ update
     current.areaIndex = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.AreaIndexAddress));
     current.actionID = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.ActionIDAddress));
     current.numVBlanks = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.NumVBlanksAddress));
-    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress + vars.KeyFlagsByteOffset));
+    current.fileNumber = memory.ReadValue<short>((IntPtr) (vars.baseRAMAddress + vars.FileNumberAddress));
+
+    int fileOffset = vars.FileLength * (current.fileNumber - 1);
+    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress +
+        fileOffset + vars.KeyFlagsByteOffset));
     
-    current.igtSaveFile = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.FileAAddress + vars.IGTSaveFileOffset));
+    current.igtSaveFile = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.FileAAddress +
+        + fileOffset + vars.IGTSaveFileOffset));
     current.igtTimerOffset = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.IGTTimerOffsetAddress));
     current.igtGlobalTimer = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.IGTGlobalTimerAddress));
     #endregion
