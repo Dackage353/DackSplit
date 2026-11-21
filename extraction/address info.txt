@@ -40,3 +40,8 @@ gSaveBuffer
 - https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/src/game/save_file.h#L66
 - struct SaveBuffer
 - 0x80207700
+
+gCurrSaveFileNum
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/src/game/save_file.h#L66
+- s16 (signed short)
+- 0x8032ddf4

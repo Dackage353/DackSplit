@@ -66,6 +66,7 @@ if __name__ == '__main__':
     gSaveBuffer = map.get('gSaveBuffer')
     gTimerOffset = map.get('gTimerOffset')
     gGlobalTimer = map.get('gGlobalTimer')
+    gCurrSaveFileNum = map.get('gCurrSaveFileNum')
 
 
     with open(tmpl_path) as file:
@@ -83,6 +84,7 @@ if __name__ == '__main__':
     text = Template(text).safe_substitute(gTimerOffset = hex(ptr_swap32(gTimerOffset)) if gTimerOffset else '')
     text = Template(text).safe_substitute(gGlobalTimer = hex(ptr_swap32(gGlobalTimer)) if gGlobalTimer else '')
 
+    text = Template(text).safe_substitute(gCurrSaveFileNum = hex(ptr_swap16(gCurrSaveFileNum)) if gCurrSaveFileNum else '')
 
     with open(output_path, 'w') as file:
         file.write(text)
