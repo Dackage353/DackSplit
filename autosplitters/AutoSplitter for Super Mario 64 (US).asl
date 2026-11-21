@@ -32,8 +32,9 @@ startup
     vars.AreaIndexAddress = 0x33b4bf;
     vars.ActionIDAddress = 0x33b17c;
     vars.NumVBlanksAddress = 0x32d580;
-    vars.FileAAddress = 0x207708;
+    vars.FileAAddress = 0x207700;
     vars.FileALength = 0x70;
+    vars.KeyFlagsByteOffset = 0x8;
     #endregion
     
     #region Non-editable constants
@@ -298,7 +299,7 @@ update
     current.areaIndex = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.AreaIndexAddress));
     current.actionID = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.ActionIDAddress));
     current.numVBlanks = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.NumVBlanksAddress));
-    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress));
+    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress + vars.KeyFlagsByteOffset));
     #endregion
     
     if (timer.CurrentPhase == TimerPhase.Running)

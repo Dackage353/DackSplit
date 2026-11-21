@@ -8,7 +8,8 @@ startup
     vars.AreaIndexAddress = 0x33a14f;
     vars.ActionIDAddress = 0x339e0c;
     vars.NumVBlanksAddress = 0x32c640;
-    vars.FileAAddress = 0x207b08;
+    vars.FileAAddress = 0x207b00;
+    vars.KeyFlagsByteOffset = 0x8;
     
 	settings.Add("CompileCheck", false, "If you see this it compiled");
     vars.AddressSearchInterval = 1000;
@@ -170,7 +171,7 @@ update
     current.areaIndex = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.AreaIndexAddress));
     current.actionID = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.ActionIDAddress));
     current.numVBlanks = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.NumVBlanksAddress));
-    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress));
+    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress + vars.KeyFlagsByteOffset));
     #endregion
     
     var sb = new StringBuilder();
