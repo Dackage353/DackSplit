@@ -170,10 +170,15 @@ init
 
 update
 {
-    #region Handle baseRAMAddress
+    #region Find baseRAMAddress
     if (!vars.baseRAMAddressFound)
     {
-        if (!vars.stopwatch.IsRunning || vars.stopwatch.ElapsedMilliseconds > 1000)
+        bool onCooldown = vars.stopwatch.IsRunning && vars.stopwatch.ElapsedMilliseconds <= 1000;
+        if (onCooldown)
+        {
+            return false;
+        }
+        else
         {
             vars.stopwatch.Start();
             vars.baseRAMAddress = IntPtr.Zero;
@@ -194,16 +199,8 @@ update
                     
                     addr += (long)mbi.RegionSize;
                     
-                    if (mbi.State != MemPageState.MEM_COMMIT)
-                        continue;
-                    
-                    if ((mbi.Protect & MemPageProtect.PAGE_GUARD) != 0)
-                        continue;
-                    
-                    if (mbi.Type != MemPageType.MEM_PRIVATE)
-                        continue;
-                    
-                    if (((int) mbi.Protect & (int) 0xcc) == 0)
+                    if (mbi.State != MemPageState.MEM_COMMIT || (mbi.Protect & MemPageProtect.PAGE_GUARD) != 0 ||
+                        mbi.Type != MemPageType.MEM_PRIVATE || ((int) mbi.Protect & (int) 0xcc) == 0)
                         continue;
                     
                     if (vars.retroarch)
@@ -222,14 +219,11 @@ update
                                 uint val;
                                 var probeAddr = (IntPtr) probe;
                                 bool readSuccess = game.ReadValue(probeAddr, out val);
-                                if (readSuccess)
+                                if (readSuccess && (val & 0xfffff000) == 0x3C1A8000)
                                 {
-                                    if ((val & 0xfffff000) == 0x3C1A8000)
-                                    {
-                                        vars.baseRAMAddress = probeAddr;
-                                        ramFound = true;
-                                        break;
-                                    }
+                                    vars.baseRAMAddress = probeAddr;
+                                    ramFound = true;
+                                    break;
                                 }
                             }
                         }
@@ -242,11 +236,7 @@ update
                     else
                     {
                         uint val;
-                        if (!game.ReadValue(mbi.BaseAddress, out val))
-                        {
-                            continue;
-                        }
-                        if ((val & 0xfffff000) == 0x3C1A8000)
+                        if (game.ReadValue(mbi.BaseAddress, out val) && (val & 0xfffff000) == 0x3C1A8000)
                         {
                             vars.baseRAMAddress = mbi.BaseAddress;
                             break;
@@ -263,11 +253,7 @@ update
                 {
                     uint val;
                     var addr = (IntPtr) (parallelStart + num * 0x1000);
-                    if (!game.ReadValue(addr, out val))
-                    {
-                        continue;
-                    }
-                    if ((val & 0xfffff000) == 0x3C1A8000)
+                    if (game.ReadValue(addr, out val) && (val & 0xfffff000) == 0x3C1A8000)
                     {
                         vars.baseRAMAddress = addr;
                         break;
@@ -286,13 +272,10 @@ update
                 vars.baseRAMAddressFound = true;
             }
         }
-        else
-        {
-            return false;
-        }
     }
+    #endregion
     
-    // Verify base RAM address is still valid on each update
+    #region Verify baseRAMAddress is valid
     uint tval;
     if (!game.ReadValue((IntPtr) vars.baseRAMAddress, out tval))
     {
@@ -303,11 +286,13 @@ update
     
     if ((tval & 0xfffff000) != 0x3C1A8000)
     {
-        if (0 == (vars.verifyRetriesLeft--))
+        if (vars.verifyRetriesLeft == 0)
         {
             vars.baseRAMAddressFound = false;
             vars.baseRAMAddress = IntPtr.Zero;
         }
+
+        vars.verifyRetriesLeft--;
         return false;
     }
     else
