@@ -19,7 +19,8 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 
 ----------
 ## Setup
-- Download the .asl file in [releases](https://github.com/Dackage353/Dackage-s-SM64-LiveSplit-AutoSplitter/releases)
+- For most romhacks, download "DackSplit.v1.4.0.for.Super.Mario.64.US.asl" in [releases](https://github.com/Dackage353/Dackage-s-SM64-LiveSplit-AutoSplitter/releases).
+    The other .asl files are for specific decomp hacks.
 - Add a "Scriptable Auto Splitter" to you LiveSplit layout. edit layout -> ➕ -> Control -> Scriptable Auto Splitter
 - Configure options for your run. It's recommended to turn off "reset" and "Delete File A..." until you are comfortable with the autosplitter
 
@@ -34,12 +35,13 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 ----------
 ## Common Issues
 
-"Keys aren't working"
-- Keys only work on File A at the moment. I want to fix this eventually
-
-"How to split on toad stars"
+"How to split on toad/non-stop stars"
 - The splitter waits for an area change by default to split. It's recommended to do it this way for accurate golds.
 - If you wish, you can split on star grab or xcam by adding -g or -x to the split name e.g. "toad star (32) -g"
+
+"It doesn't split when the star warps you back to the same level"
+- This doesn't work since there's not an area change. You can make it split on fadeout by adding -c to the split name
+    e.g. "tower of the east reds (20) -c"
 
 ----------
 ## Course Labels
