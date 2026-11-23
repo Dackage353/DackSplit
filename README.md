@@ -19,7 +19,7 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 
 ----------
 ## Setup
-- For most romhacks, download "DackSplit.v1.4.0.for.Super.Mario.64.US.asl" in [releases](https://github.com/Dackage353/Dackage-s-SM64-LiveSplit-AutoSplitter/releases).
+- For most romhacks, download "DackSplit.v1.4.0" in [releases](https://github.com/Dackage353/Dackage-s-SM64-LiveSplit-AutoSplitter/releases).
     The other .asl files are for specific decomp hacks.
 - Add a "Scriptable Auto Splitter" to you LiveSplit layout. edit layout -> ➕ -> Control -> Scriptable Auto Splitter
 - Configure options for your run. It's recommended to turn off "reset" and "Delete File A..." until you are comfortable with the autosplitter
