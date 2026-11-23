@@ -1,4 +1,4 @@
-# Dackage's SM64 LiveSplit AutoSplitter
+# DackSplit (LiveSplit AutoSplitter for SM64)
 
 Wanting to add the ability to use course labels, I looked into making my autosplitter version. This is
     functionally very similiar to aglab2's "LiveSplit.SuperMario64.asl" autosplitter and is what I built off of.
